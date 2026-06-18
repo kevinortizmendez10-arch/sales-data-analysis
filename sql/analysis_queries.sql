@@ -4,42 +4,55 @@
 -- CLIENTES, PRODUCTOS, VENTAS, EMPLEADOS, CATEGORIAS, DETALLE_VENTA
 -- =========================================
 
--- 1. Total revenue
-SELECT 
-    SUM(dv.cantidad * dv.precio_unitario) AS total_revenue
-FROM detalle_venta dv;
+-- 1. Total Revenue
+SELECT
+    SUM(TOTAL) AS TOTAL_REVENUE
+FROM VENTAS;
 
--- 2. Total orders
-SELECT 
-    COUNT(*) AS total_orders
-FROM ventas;
+-- 2. Total Orders
+SELECT
+    COUNT(*) AS TOTAL_ORDERS
+FROM VENTAS;
 
--- 3. Top 10 best-selling products
-SELECT 
-    p.nombre AS product_name,
-    SUM(dv.cantidad) AS total_quantity_sold,
-    SUM(dv.cantidad * dv.precio_unitario) AS total_revenue
-FROM detalle_venta dv
-JOIN productos p ON dv.producto_id = p.producto_id
-GROUP BY p.nombre
-ORDER BY total_revenue DESC
-FETCH FIRST 10 ROWS ONLY;
+-- 3. Best Selling Products
+SELECT
+    P.NOMBRE,
+    SUM(DV.CANTIDAD) AS UNITS_SOLD,
+    SUM(DV.SUBTOTAL) AS REVENUE
+FROM DETALLE_VENTA DV
+JOIN PRODUCTOS P
+    ON DV.ID_PRODUCTO = P.ID_PRODUCTO
+GROUP BY P.NOMBRE
+ORDER BY REVENUE DESC;
 
--- 4. Monthly sales trend
-SELECT 
-    TO_CHAR(v.fecha_venta, 'YYYY-MM') AS sales_month,
-    SUM(dv.cantidad * dv.precio_unitario) AS monthly_revenue
-FROM ventas v
-JOIN detalle_venta dv ON v.venta_id = dv.venta_id
-GROUP BY TO_CHAR(v.fecha_venta, 'YYYY-MM')
-ORDER BY sales_month;
+-- 4. Revenue By Category
+SELECT
+    C.NOMBRE_CATEGORIA,
+    SUM(DV.SUBTOTAL) AS REVENUE
+FROM DETALLE_VENTA DV
+JOIN PRODUCTOS P
+    ON DV.ID_PRODUCTO = P.ID_PRODUCTO
+JOIN CATEGORIAS C
+    ON P.ID_CATEGORIA = C.ID_CATEGORIA
+GROUP BY C.NOMBRE_CATEGORIA
+ORDER BY REVENUE DESC;
 
--- 5. Revenue by category
-SELECT 
-    c.nombre AS category_name,
-    SUM(dv.cantidad * dv.precio_unitario) AS total_revenue
-FROM detalle_venta dv
-JOIN productos p ON dv.producto_id = p.producto_id
-JOIN categorias c ON p.categoria_id = c.categoria_id
-GROUP BY c.nombre
-ORDER BY total_revenue DESC;
+-- 5. Top Customers
+SELECT
+    CL.NOMBRE,
+    SUM(V.TOTAL) AS TOTAL_SPENT
+FROM CLIENTES CL
+JOIN VENTAS V
+    ON CL.ID_CLIENTE = V.ID_CLIENTE
+GROUP BY CL.NOMBRE
+ORDER BY TOTAL_SPENT DESC;
+
+-- 6. Sales By Employee
+SELECT
+    E.NOMBRE,
+    SUM(V.TOTAL) AS TOTAL_SALES
+FROM EMPLEADOS E
+JOIN VENTAS V
+    ON E.ID_EMPLEADO = V.ID_EMPLEADO
+GROUP BY E.NOMBRE
+ORDER BY TOTAL_SALES DESC;
