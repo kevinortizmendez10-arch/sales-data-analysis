@@ -1,0 +1,11 @@
+"ID_PRODUCTO","NOMBRE","MARCA","PRECIO","STOCK","ID_CATEGORIA"
+1,"Laptop Gamer","ASUS",8500,10,1
+2,"Mouse RGB","Logitech",250,30,2
+3,"Monitor 24","Samsung",1800,15,3
+4,"Teclado Mecanico","Redragon",450,25,2
+5,"Impresora EcoTank","Epson",2200,8,4
+6,"SSD 1TB","Kingston",750,20,8
+7,"RAM 16GB","Corsair",550,18,5
+8,"Laptop Empresarial","HP",6200,12,1
+9,"Monitor Curvo","LG",2500,10,3
+10,"Webcam HD","Logitech",350,22,2
